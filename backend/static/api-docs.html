@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourtIQ API Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+        pre {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .endpoint {
+            border-left: 4px solid #2563eb;
+            margin-bottom: 2rem;
+            background-color: #fff;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .method {
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .method.get {
+            background-color: #10b981;
+            color: white;
+        }
+        .method.post {
+            background-color: #3b82f6;
+            color: white;
+        }
+        .method.delete {
+            background-color: #ef4444;
+            color: white;
+        }
+        .param-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #4b5563;
+        }
+        .param-type {
+            font-size: 0.75rem;
+            background-color: #f3f4f6;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            color: #6b7280;
+        }
+        .response-code {
+            font-weight: 600;
+        }
+        .response-code.success {
+            color: #10b981;
+        }
+        .response-code.error {
+            color: #ef4444;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+            border-left: 3px solid transparent;
+            color: #4b5563;
+        }
+        .nav-link:hover {
+            background-color: #f3f4f6;
+            color: #2563eb;
+        }
+        .nav-link.active {
+            border-left-color: #2563eb;
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 500;
+        }
+        .basketball-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657l1.415 1.414L13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83zM32 0l12.142 12.142-1.414 1.414L30 .828 17.272 13.556l-1.414-1.414L28 0h4zM.284 0l28 28-1.414 1.414L0 2.544V0h.284zM0 5.373l25.456 25.455-1.414 1.415L0 8.2V5.374zm0 5.656l22.627 22.627-1.414 1.414L0 13.86v-2.83zm0 5.656l19.8 19.8-1.415 1.413L0 19.514v-2.83zm0 5.657l16.97 16.97-1.414 1.415L0 25.172v-2.83zM0 28l14.142 14.142-1.414 1.414L0 30.828V28zm0 5.657L11.314 44.97l-1.414 1.414L0 36.485v-2.83zm0 5.657L8.485 47.8l-1.414 1.414L0 42.142v-2.83zm0 5.657l5.657 5.657-1.414 1.415L0 47.8v-2.83zm0 5.657l2.828 2.83-1.414 1.413L0 53.456v-2.83zM54.627 60L30 35.373 5.373 60H8.2L30 38.2 51.8 60h2.827zm-5.656 0L30 41.03 11.03 60h2.828L30 43.858 46.142 60h2.83zm-5.656 0L30 46.686 16.686 60h2.83L30 49.515 40.485 60h2.83zm-5.657 0L30 52.343 22.344 60h2.83L30 55.172 34.828 60h2.83zM32 60l-2-2-2 2h4zM59.716 0l-28 28 1.414 1.414L60 2.544V0h-.284zM60 5.373L34.544 30.828l1.414 1.415L60 8.2V5.374zm0 5.656L37.373 33.656l1.414 1.414L60 13.86v-2.83zm0 5.656l-19.8 19.8 1.415 1.413L60 19.514v-2.83zm0 5.657l-16.97 16.97 1.414 1.415L60 25.172v-2.83zM60 28L45.858 42.142l1.414 1.414L60 30.828V28zm0 5.657L48.686 44.97l1.414 1.414L60 36.485v-2.83zm0 5.657L51.515 47.8l1.414 1.414L60 42.142v-2.83zm0 5.657l-5.657 5.657 1.414 1.415L60 47.8v-2.83zm0 5.657l-2.828 2.83 1.414 1.413L60 53.456v-2.83z' fill='%232563eb' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        }
+    </style>
+</head>
+<body class="bg-gray-50 basketball-bg">
+    <header class="bg-blue-800 text-white shadow-lg">
+        <div class="container mx-auto px-6 py-6">
+            <div class="flex items-center">
+                <div class="flex items-center bg-white text-blue-800 rounded-full p-2 mr-4">
+                    <span class="text-2xl" role="img" aria-label="Basketball">🏀</span>
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold">CourtIQ API</h1>
+                    <p class="text-blue-100 mt-1">Basketball Video Analysis Platform</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-12 max-w-6xl">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar Navigation -->
+            <div class="md:w-1/4 mb-6">
+                <div class="bg-white rounded-xl shadow-sm p-4 sticky top-4">
+                    <h3 class="font-semibold text-gray-700 mb-3 px-3">Documentation</h3>
+                    <nav class="space-y-1">
+                        <a href="#overview" class="nav-link active">Overview</a>
+                        <a href="#authentication" class="nav-link">Authentication</a>
+                        <a href="#endpoints" class="nav-link">Endpoints</a>
+                        <a href="#errors" class="nav-link">Error Handling</a>
+                        <a href="#sample-code" class="nav-link">Sample Code</a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="md:w-3/4">
+                <section id="overview" class="bg-white shadow-sm rounded-xl p-8 mb-8">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-xl mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-4">Overview</h2>
+                    <p class="mb-4 text-gray-700 leading-relaxed">
+                        The CourtIQ API allows you to analyze basketball videos, detect player poses, and identify specific basketball actions
+                        like jumping, shooting, and dribbling. This API provides endpoints for uploading videos, checking processing status,
+                        and retrieving analysis results.
+                    </p>
+                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-md mt-6">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-blue-600" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <h3 class="font-medium text-blue-800">Base URL</h3>
+                                <div class="mt-1 text-sm text-blue-700">
+                                    <code class="bg-blue-100 px-2 py-1 rounded">http://localhost:5001</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            <div class="bg-white shadow rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Authentication</h2>
+                <p>
+                    Currently, the API does not require authentication for local development. Authentication will be added in future versions.
+                </p>
+            </div>
+
+            <div class="bg-white shadow rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Endpoints</h2>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Health Check</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">GET</span>
+                        <code>/health</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Check if the API is running and connected to the database.</p>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "status": "ok",
+  "mongodb": true,
+  "timestamp": "2025-05-12T10:30:00.000Z"
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Upload and Analyze Video</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded mr-2">POST</span>
+                        <code>/analyze</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Upload a basketball video for analysis.</p>
+                    <h4 class="font-medium mt-4 mb-2">Request:</h4>
+                    <p><code>Content-Type: multipart/form-data</code></p>
+                    <p><code>video: [video file]</code></p>
+
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "message": "Video uploaded and being processed",
+  "task_id": "task-uuid-123456",
+  "status": "processing"
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Check Analysis Status</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">GET</span>
+                        <code>/status/{task_id}</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Check the status of a video analysis task.</p>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "task_id": "task-uuid-123456",
+  "status": "SUCCESS",
+  "result": {
+    "total_frames": 1200,
+    "frames_with_pose": 980,
+    "jumping_frames": 120,
+    "shooting_frames": 85,
+    "dribbling_frames": 210,
+    "pose_percentage": 81.67,
+    "jumping_percentage": 12.24,
+    "shooting_percentage": 8.67,
+    "dribbling_percentage": 21.43,
+    "duration": 40.0,
+    "sample_frames": [
+      "/static/processed_images/abcd1234/frame_60.jpg",
+      "/static/processed_images/abcd1234/frame_120.jpg"
+    ],
+    "actions_file": "/static/processed_images/abcd1234/actions.json",
+    "result_id": "6076e7a1f811e1d6e8e8e8e8"
+  }
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Get Analysis Result</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">GET</span>
+                        <code>/results/{result_id}</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Retrieve a specific analysis result by ID.</p>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "_id": "6076e7a1f811e1d6e8e8e8e8",
+  "video_name": "basketball_game.mp4",
+  "total_frames": 1200,
+  "frames_with_pose": 980,
+  "detection_rate": 0.8167,
+  "jumping_frames": 120,
+  "shooting_frames": 85,
+  "dribbling_frames": 210,
+  "jumping_percentage": 0.1224,
+  "shooting_percentage": 0.0867,
+  "dribbling_percentage": 0.2143,
+  "duration": 40.0,
+  "actions_file": "/static/processed_images/abcd1234/actions.json",
+  "created_at": "2025-05-12T10:30:00.000Z"
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">List Analysis Results</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">GET</span>
+                        <code>/results</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">List all analysis results with optional filtering.</p>
+                    <h4 class="font-medium mt-4 mb-2">Query Parameters:</h4>
+                    <ul class="list-disc list-inside mb-4">
+                        <li><code>limit</code>: Maximum number of results to return (default: 10)</li>
+                        <li><code>search</code>: Search by video name</li>
+                    </ul>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "status": "success",
+  "count": 2,
+  "results": [
+    {
+      "_id": "6076e7a1f811e1d6e8e8e8e8",
+      "video_name": "basketball_game.mp4",
+      "total_frames": 1200,
+      "frames_with_pose": 980,
+      "detection_rate": 0.8167,
+      "jumping_frames": 120,
+      "shooting_frames": 85,
+      "dribbling_frames": 210,
+      "created_at": "2025-05-12T10:30:00.000Z"
+    },
+    {
+      "_id": "6076e7a1f811e1d6e8e8e8e9",
+      "video_name": "basketball_training.mp4",
+      "total_frames": 900,
+      "frames_with_pose": 850,
+      "detection_rate": 0.9444,
+      "jumping_frames": 95,
+      "shooting_frames": 120,
+      "dribbling_frames": 180,
+      "created_at": "2025-05-11T15:45:00.000Z"
+    }
+  ]
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Get Analysis Statistics</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded mr-2">GET</span>
+                        <code>/api/stats</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Get summary statistics of all analyses.</p>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "status": "success",
+  "stats": {
+    "total_analyses": 10,
+    "total_frames": 12500,
+    "total_pose_frames": 10200,
+    "total_jumping_frames": 950,
+    "total_shooting_frames": 750,
+    "total_dribbling_frames": 1800,
+    "avg_detection_rate": 81.6,
+    "avg_duration": 35.2
+  }
+}</code></pre>
+                </div>
+
+                <div class="endpoint p-4">
+                    <h3 class="text-lg font-semibold mb-2">Delete Analysis Result</h3>
+                    <div class="flex items-center mb-2">
+                        <span class="bg-red-100 text-red-800 px-2 py-1 rounded mr-2">DELETE</span>
+                        <code>/api/results/{result_id}/delete</code>
+                    </div>
+                    <p class="text-gray-600 mb-4">Delete a specific analysis result by ID.</p>
+                    <h4 class="font-medium mt-4 mb-2">Response Example:</h4>
+                    <pre><code>{
+  "status": "success",
+  "message": "Result 6076e7a1f811e1d6e8e8e8e8 deleted successfully"
+}</code></pre>
+                </div>
+            </div>
+
+            <div class="bg-white shadow rounded-lg p-6 mb-8">
+                <h2 class="text-xl font-semibold mb-4">Error Handling</h2>
+                <p class="mb-4">
+                    The API returns appropriate HTTP status codes and error messages when something goes wrong.
+                </p>
+                <h4 class="font-medium mt-4 mb-2">Example Error Response:</h4>
+                <pre><code>{
+  "status": "error",
+  "error": "Failed to retrieve results",
+  "details": "MongoDB connection failed"
+}</code></pre>
+            </div>
+        </main>
+
+        <footer class="mt-8 text-center text-gray-500">
+            <p>© 2025 CourtIQ. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
